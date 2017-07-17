@@ -50,7 +50,7 @@ export function drawPointText (points, series, config, context) {
     context.setFillStyle('#666666');
     points.forEach(function(item, index) {
         if (item !== null) {        
-            let formatVal = series.format ? series.format(data[index]) : data[index];
+            let formatVal = series.format ? series.format(data[index], index) : data[index];
             context.fillText(formatVal, item.x - measureText(formatVal) / 2, item.y - 2);
         }
     });
@@ -89,9 +89,9 @@ export function drawPieText (series, opts, config, context, radius, center) {
     let textObjectCollection = [];
     let lastTextObject = null;
 
-    let seriesConvert = series.map((item) => {
+    let seriesConvert = series.map((item, i) => {
         let arc = 2 * Math.PI - (item._start_ + 2 * Math.PI * item._proportion_ / 2);
-        let text = item.format ? item.format(+item._proportion_.toFixed(2)) : `${Util.toFixed(item._proportion_ * 100)}%`;
+        let text = item.format ? item.format(+item._proportion_.toFixed(2), i) : `${Util.toFixed(item._proportion_ * 100)}%`;
         let color = item.color;
         return { arc, text, color };
     });

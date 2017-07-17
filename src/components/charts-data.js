@@ -15,7 +15,7 @@ export function getSeriesDataItem(series, index) {
             let seriesItem = {};
             seriesItem.color = item.color;
             seriesItem.name = item.name;
-            seriesItem.data = item.format ? item.format(item.data[index]) : item.data[index];
+            seriesItem.data = item.format ? item.format(item.data[index], index) : item.data[index];
             data.push(seriesItem);
         }
     });
@@ -269,8 +269,8 @@ export function getPieDataPoints(series, process = 1) {
 export function getPieTextMaxLength(series) {
     series = getPieDataPoints(series);
     let maxLength = 0;
-    series.forEach((item) => {
-        let text = item.format ? item.format(+item._proportion_.toFixed(2)) : `${Util.toFixed(item._proportion_ * 100)}%`;
+    series.forEach((item, i) => {
+        let text = item.format ? item.format(+item._proportion_.toFixed(2), i) : `${Util.toFixed(item._proportion_ * 100)}%`;
         maxLength = Math.max(maxLength, measureText(text));
     });
 
@@ -372,9 +372,9 @@ export function calYAxisData(series, opts, config) {
 
     let ranges = getYAxisTextList(series, opts, config);
     let yAxisWidth = config.yAxisWidth;
-    let rangesFormat = ranges.map(function(item) {
+    let rangesFormat = ranges.map(function(item, i) {
         item = Util.toFixed(item, 2);
-        item = opts.yAxis.format ? opts.yAxis.format(Number(item)) : item;
+        item = opts.yAxis.format ? opts.yAxis.format(Number(item), i) : item;
         yAxisWidth = Math.max(yAxisWidth, measureText(item) + 5);
         return item;
     });
